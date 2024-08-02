@@ -1,21 +1,23 @@
-from decorator import input_error
+from decorator import error_decorator
 from adress_book import AddressBook
 from record import Record
 from colorama import Fore, init
+import pickle
 
 init(autoreset=True)
 
 
-@input_error
+@error_decorator
 def main():
-    book = AddressBook()
+    book = load_data()
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
 
         if command in ["close", "exit"]:
-            print("Good bye!")
+            save_data(book)
+            print("All the data has been saved.\nGood bye!")
             break
 
         elif command in ["hi", "hello"]:
@@ -23,6 +25,9 @@ def main():
 
         elif command == "add":
             print(add_contact(args, book))
+
+        elif command == "delete":
+            print(delete(args, book))
 
         elif command == "change":
             print(change_phone(args, book))
@@ -46,28 +51,39 @@ def main():
             print(Fore.YELLOW + "Invalid command.")
 
 
-@input_error
+@error_decorator
 def parse_input(user_input):
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
     return cmd, *args
 
 
-@input_error
+@error_decorator
 def add_contact(args: list, book: AddressBook):
     name, phone, *_ = args
     record = book.find(name)
     message = 'Contact updated'
     if record is None:
         record = Record(name)
+        record.add_phone(phone)
         book.add_record(record)
         message = 'Contact added'
-    if phone:
+        return message
+    elif phone:
         record.add_phone(phone)
     return message
 
 
-@input_error
+def delete(args: list, book: AddressBook):
+    name, *_ = args
+    record = book.find(name)
+    if record is not None:
+        book.delete(name)
+        return 'Contact deleted'
+    return 'Contact not found'
+
+
+@error_decorator
 def change_phone(args: list, book: AddressBook):
     name, old_phone, new_phone, *_ = args
     record = book.find(name)
@@ -75,7 +91,7 @@ def change_phone(args: list, book: AddressBook):
     return f'Phone changed from {old_phone} to {new_phone} for contact: {record.name.value}'
 
 
-@input_error
+@error_decorator
 def show_phone(args: list, book: AddressBook):
     name, *_ = args
     record = book.find(name)
@@ -84,7 +100,7 @@ def show_phone(args: list, book: AddressBook):
     return record.show_phones()
 
 
-@input_error
+@error_decorator
 def add_birthday(args: list, book: AddressBook):
     name, date_of_birth, *_ = args
     record = book.find(name)
@@ -99,13 +115,25 @@ def add_birthday(args: list, book: AddressBook):
     return 'Birthday added'
 
 
-@input_error
+@error_decorator
 def show_birthday(args: list, book: AddressBook):
     name, *_ = args
     record = book.find(name)
     if record is None:
         raise ValueError(f'Record with name: {name} does not exist')
     return record.show_birthday()
+
+
+@error_decorator
+def save_data(book, filename="addressbook.pkl"):
+    with open(filename, "wb") as file:
+        pickle.dump(book, file)
+
+
+@error_decorator
+def load_data(filename="addressbook.pkl"):
+    with open(filename, "rb") as file:
+        return pickle.load(file)
 
 
 if __name__ == '__main__':

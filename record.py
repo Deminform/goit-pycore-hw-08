@@ -29,8 +29,8 @@ class Record:
     def edit_phone(self, phone_number: str, new_phone_number: str):
         if not self.find_phone(phone_number):
             raise ValueError(f'Phone number {phone_number} does not exist')
-        self.remove_phone(phone_number)
         self.add_phone(new_phone_number)
+        self.remove_phone(phone_number)
 
     def show_phones(self):
         return '; '.join(phone.value for phone in self.phones)

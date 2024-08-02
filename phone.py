@@ -7,6 +7,6 @@ class Phone(Field):
     def __init__(self, value):
         """ Check if the number is correct """
         if not re.match(r'^\d{10}$', value):
-            raise ValueError("Invalid phone number. Must contain 10 digits.")
+            raise ValueError("Phone number not added! Invalid phone number. Must contain 10 digits.")
 
         super().__init__(value)
