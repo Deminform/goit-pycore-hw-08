@@ -1,12 +1,15 @@
-from field import Field
 import re
+from abstract_field import Field, Validate
 
 
-class Phone(Field):
-
+class Phone(Field, Validate):
     def __init__(self, value):
-        """ Check if the number is correct """
+        self.__validate(value)
+        super().__init__(value)
+
+    def __validate(self, value):
         if not re.match(r'^\d{10}$', value):
             raise ValueError("Phone number not added! Invalid phone number. Must contain 10 digits.")
 
-        super().__init__(value)
+    def __str__(self):
+        return self._value

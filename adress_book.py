@@ -13,7 +13,7 @@ class AddressBook(UserDict):
     def add_record(self, record: Record):
         self.data[record.name.value] = record
 
-    def find(self, name: str):
+    def find(self, name: str) -> Record:
         return next((record for record in self.data.values() if str(record.name.value).lower() == name.lower()), None)
 
     def delete(self, name: str):

@@ -1,14 +1,17 @@
-import re
-from datetime import datetime, date, timedelta
-from field import Field
+from datetime import datetime
+from abstract_field import Field, Validate
 
 
-class Birthday(Field):
-
+class Birthday(Field, Validate):
     def __init__(self, value):
+        self.__validate(value)
+        super().__init__(value)
+
+    def __validate(self, value):
         try:
-            value = datetime.strptime(value, '%d.%m.%Y')
+            datetime.strptime(value, '%d.%m.%Y')
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
 
-        super().__init__(value.date().strftime('%d.%m.%Y'))
+    def __str__(self):
+        return self._value

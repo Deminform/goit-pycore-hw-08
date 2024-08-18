@@ -74,6 +74,7 @@ def add_contact(args: list, book: AddressBook):
     return message
 
 
+@error_decorator
 def delete(args: list, book: AddressBook):
     name, *_ = args
     record = book.find(name)
