@@ -26,7 +26,7 @@ class ContactReader(ABC):
 
 class ContactManager(ABC):
     @abstractmethod
-    def add_contact(self, contact):
+    def add_contact(self, name, phone_number):
         pass
 
     @abstractmethod
@@ -41,12 +41,10 @@ class ContactManager(ABC):
     def add_birthday(self, contact, birthday):
         pass
 
-    @staticmethod
     @abstractmethod
-    def save_data(book: AddressBook):
+    def save_data(self):
         pass
 
-    @staticmethod
     @abstractmethod
-    def load_data():
+    def load_data(self):
         pass

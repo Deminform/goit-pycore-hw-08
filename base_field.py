@@ -20,5 +20,5 @@ class Field(ABC):
 
 class Validate(ABC):
     @abstractmethod
-    def __validate(self, value):
+    def _validate(self, value):
         pass

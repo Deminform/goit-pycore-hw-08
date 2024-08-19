@@ -16,12 +16,14 @@ class BaseFileManager(ABC):
 
 
 class PickleFileManager(BaseFileManager):
-    @staticmethod
-    def save(book: AddressBook, filename):
-        with open(filename, "wb") as file:
+
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def save(self, book: AddressBook):
+        with open(self.file_path, "wb") as file:
             pickle.dump(book, file)
 
-    @staticmethod
-    def load(filename) -> AddressBook:
-        with open(filename, "rb") as file:
+    def load(self) -> AddressBook:
+        with open(self.file_path, "rb") as file:
             return pickle.load(file)
