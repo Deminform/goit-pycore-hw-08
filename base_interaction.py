@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
+from adress_book import AddressBook
 
 
 class ContactReader(ABC):
     @abstractmethod
-    def show_contacts(self, contacts):
+    def show_contacts(self):
         pass
 
     @abstractmethod
@@ -38,4 +39,14 @@ class ContactManager(ABC):
 
     @abstractmethod
     def add_birthday(self, contact, birthday):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def save_data(book: AddressBook):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def load_data():
         pass
