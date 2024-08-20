@@ -17,8 +17,10 @@ class AddressBook(UserDict):
         return next((record for record in self.data.values() if str(record.name.value).lower() == name.lower()), None)
 
     def delete(self, name: str):
-        if name in self.data.keys():
-            del self.data[name]
+        for contact in self.data.keys():
+            if contact.lower() == name.lower():
+                del self.data[contact]
+                break
 
     @staticmethod
     def string_to_date(date_string) -> date:
@@ -49,19 +51,20 @@ class AddressBook(UserDict):
         today = date.today()
 
         for record in self.data.values():
-            date_of_birth = self.string_to_date(record.birthday.value).replace(year=today.year)
+            if record.birthday is not None:
+                date_of_birth = self.string_to_date(record.birthday.value).replace(year=today.year)
 
-            if date_of_birth < today:
-                date_of_birth = self.string_to_date(record.birthday.value).replace(year=today.year + 1)
+                if date_of_birth < today:
+                    date_of_birth = self.string_to_date(record.birthday.value).replace(year=today.year + 1)
 
-            if 0 <= (date_of_birth - today).days <= days:
-                birthday_this_year = self.adjust_for_weekend(date_of_birth)
+                if 0 <= (date_of_birth - today).days <= days:
+                    birthday_this_year = self.adjust_for_weekend(date_of_birth)
 
-                congratulation_date_str = self.date_to_string(birthday_this_year)
-                upcoming_birthdays.append({
-                    'name': record.name.value,
-                    'congratulation_date': congratulation_date_str
-                })
+                    congratulation_date_str = self.date_to_string(birthday_this_year)
+                    upcoming_birthdays.append({
+                        'name': record.name.value,
+                        'congratulation_date': congratulation_date_str
+                    })
 
         # Generating a table for return
         table = PrettyTable()

@@ -1,9 +1,9 @@
 from pathlib import Path
-from base_interaction import ContactReader, ContactManager
+from user_view_interface import ContactReader, ContactManager
 from file_manager import PickleFileManager
 from adress_book import AddressBook
 from record import Record
-from decorator import error_decorator
+from error_decorator import error_decorator
 
 
 class UserView(ContactManager, ContactReader):
@@ -34,18 +34,21 @@ class UserView(ContactManager, ContactReader):
             record.add_phone(phone_number)
         return message
 
+    @error_decorator
     def delete_contact(self, name):
         record = self.book.find(name)
         if record:
             self.book.delete(name)
-            return 'Contact deleted'
+            return f'Contact "{name}" deleted'
         return 'Contact not found'
 
+    @error_decorator
     def update_phone(self, name, old_phone, new_phone):
         record = self.book.find(name)
         record.edit_phone(old_phone, new_phone)
         return f'Phone changed from {old_phone} to {new_phone} for contact: {record.name.value}'
 
+    @error_decorator
     def add_birthday(self, name, date_of_birth):
         record = self.book.find(name)
         if record is None:
@@ -57,18 +60,22 @@ class UserView(ContactManager, ContactReader):
             raise ValueError(f'Record with name: {record.name.value} already has birthday')
         return 'Birthday added'
 
+    @error_decorator
     def show_contacts(self):
-        print(self.book)
+        return self.book
 
+    @error_decorator
     def show_birthday(self, name):
         record = self.book.find(name)
         if record is None:
             raise ValueError(f'Record with name: {name} does not exist')
         return record.show_birthday()
 
+    @error_decorator
     def show_upcoming_birthdays(self):
-        self.book.get_upcoming_birthdays()
+        return self.book.get_upcoming_birthdays()
 
+    @error_decorator
     def show_phone(self, name):
         record = self.book.find(name)
         if record is None:
@@ -77,13 +84,16 @@ class UserView(ContactManager, ContactReader):
 
 
 if __name__ == '__main__':
-    new_user = UserView('new_addressbook.pkl')
-    # new_user.add_contact('Andrey', '2222222222')
-    # new_user.show_phone('andrey')
-    # new_user.update_phone('andrey', '2222222222', '4444444444')
-    # new_user.add_birthday('andrey', '23.08.2000')
-    new_user.show_upcoming_birthdays()
-    # new_user.show_contacts()
-    # new_user.delete_contact('andrey')
+    new_user = UserView('files/new_addressbook.pkl')
+    # print(new_user.add_contact('Mikhail', '5555555555'))
+    print(new_user.show_contacts())
+    # print(new_user.show_phone('mikhail'))
+    # print(new_user.update_phone('mikhail', '5555555555', '7777777777'))
+    # print(new_user.add_birthday('mikhail', '27.08.2000'))
+    print(new_user.show_upcoming_birthdays())
+    # print(new_user.show_contacts())
+    # print(new_user.delete_contact('mikhail'))
     # new_user.save_data()
-    # new_user.show_contacts()
+    # print(new_user.show_phone('mikhail'))
+    # print(new_user.show_contacts())
+    new_user.save_data()

@@ -1,4 +1,4 @@
-from base_field import Field, Validate
+from fields_interface import Field, Validate
 
 
 class Name(Field, Validate):

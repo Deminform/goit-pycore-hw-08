@@ -1,4 +1,4 @@
-from decorator import error_decorator
+from error_decorator import error_decorator
 from adress_book import AddressBook
 from record import Record
 from colorama import Fore, init
@@ -126,13 +126,13 @@ def show_birthday(args: list, book: AddressBook):
 
 
 @error_decorator
-def save_data(book, filename="new_addressbook.pkl"):
+def save_data(book, filename="files/new_addressbook.pkl"):
     with open(filename, "wb") as file:
         pickle.dump(book, file)
 
 
 @error_decorator
-def load_data(filename="new_addressbook.pkl"):
+def load_data(filename="files/new_addressbook.pkl"):
     with open(filename, "rb") as file:
         return pickle.load(file)
 

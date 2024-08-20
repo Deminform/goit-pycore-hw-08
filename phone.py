@@ -1,5 +1,5 @@
 import re
-from base_field import Field, Validate
+from fields_interface import Field, Validate
 
 
 class Phone(Field, Validate):
