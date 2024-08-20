@@ -6,12 +6,12 @@ from abc import ABC, abstractmethod
 class BaseFileManager(ABC):
     @staticmethod
     @abstractmethod
-    def save(book, filename):
+    def save(book, file_path):
         pass
 
     @staticmethod
     @abstractmethod
-    def load(filename):
+    def load(file_path):
         pass
 
 

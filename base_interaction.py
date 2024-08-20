@@ -8,11 +8,7 @@ class ContactReader(ABC):
         pass
 
     @abstractmethod
-    def show_commands(self):
-        pass
-
-    @abstractmethod
-    def show_birthday(self):
+    def show_birthday(self, name):
         pass
 
     @abstractmethod
@@ -20,7 +16,7 @@ class ContactReader(ABC):
         pass
 
     @abstractmethod
-    def show_phone(self):
+    def show_phone(self, name):
         pass
 
 
@@ -30,15 +26,15 @@ class ContactManager(ABC):
         pass
 
     @abstractmethod
-    def delete_contact(self, contact):
+    def delete_contact(self, name):
         pass
 
     @abstractmethod
-    def update_phone(self, new_phone, old_phone):
+    def update_phone(self, name, old_phone, new_phone):
         pass
 
     @abstractmethod
-    def add_birthday(self, contact, birthday):
+    def add_birthday(self, name, birthday):
         pass
 
     @abstractmethod

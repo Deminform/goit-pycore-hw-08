@@ -10,7 +10,6 @@ class UserView(ContactManager, ContactReader):
 
     def __init__(self, file_path):
         self.file_manager = PickleFileManager(file_path)
-        # self.file_path = file_path
         self.book = self.load_data()
 
     @error_decorator
@@ -35,36 +34,56 @@ class UserView(ContactManager, ContactReader):
             record.add_phone(phone_number)
         return message
 
-    def delete_contact(self, contact):
-        pass
+    def delete_contact(self, name):
+        record = self.book.find(name)
+        if record:
+            self.book.delete(name)
+            return 'Contact deleted'
+        return 'Contact not found'
 
-    def update_phone(self, new_phone, old_phone):
-        pass
+    def update_phone(self, name, old_phone, new_phone):
+        record = self.book.find(name)
+        record.edit_phone(old_phone, new_phone)
+        return f'Phone changed from {old_phone} to {new_phone} for contact: {record.name.value}'
 
-    def add_birthday(self, contact, birthday):
-        pass
+    def add_birthday(self, name, date_of_birth):
+        record = self.book.find(name)
+        if record is None:
+            raise ValueError(f'Record with name: {name} does not exist')
+
+        if record.birthday is None:
+            record.add_birthday(date_of_birth)
+        else:
+            raise ValueError(f'Record with name: {record.name.value} already has birthday')
+        return 'Birthday added'
 
     def show_contacts(self):
         print(self.book)
 
-    def show_commands(self):
-        pass
-
-    def show_birthday(self):
-        pass
+    def show_birthday(self, name):
+        record = self.book.find(name)
+        if record is None:
+            raise ValueError(f'Record with name: {name} does not exist')
+        return record.show_birthday()
 
     def show_upcoming_birthdays(self):
-        pass
+        self.book.get_upcoming_birthdays()
 
-    def show_phone(self):
-        pass
+    def show_phone(self, name):
+        record = self.book.find(name)
+        if record is None:
+            raise ValueError(f'Record with name: "{name}" does not exist')
+        return record.show_phones()
 
 
 if __name__ == '__main__':
-    # path_file = Path('new_addressbook.pkl')
-    # path_file.mkdir(parents=True, exist_ok=True)
-    # path_file.touch(exist_ok=True)
     new_user = UserView('new_addressbook.pkl')
-    new_user.add_contact('Serhii', '1111111111')
-    new_user.show_contacts()
-
+    # new_user.add_contact('Andrey', '2222222222')
+    # new_user.show_phone('andrey')
+    # new_user.update_phone('andrey', '2222222222', '4444444444')
+    # new_user.add_birthday('andrey', '23.08.2000')
+    new_user.show_upcoming_birthdays()
+    # new_user.show_contacts()
+    # new_user.delete_contact('andrey')
+    # new_user.save_data()
+    # new_user.show_contacts()

@@ -21,7 +21,7 @@ class AddressBook(UserDict):
             del self.data[name]
 
     @staticmethod
-    def string_to_date(date_string):
+    def string_to_date(date_string) -> date:
         return datetime.strptime(date_string, '%d.%m.%Y').date()
 
     @staticmethod
